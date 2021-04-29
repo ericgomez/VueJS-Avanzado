@@ -43,14 +43,28 @@
         <div class="mb-4">
           <label class="input__label">Email</label>
           <div class="form__field relative">
-            <input class="input__field" type="text" placeholder="bruce.wayne@imnotbatman.org" />
+            <input
+              v-model="formLogin.email"
+              class="input__field"
+              type="text"
+              placeholder="bruce.wayne@imnotbatman.org"
+            />
           </div>
         </div>
         <div class="mb-4">
           <label class="input__label">Password</label>
           <div class="form__field relative">
-            <input class="input__field" type="password" placeholder="*********" />
+            <input
+              v-model="formLogin.password"
+              class="input__field"
+              type="password"
+              placeholder="*********"
+            />
           </div>
+        </div>
+        <div class="mb-4">
+          <toggle-input v-model="formLogin.rememberMe"></toggle-input>
+          Remember Me
         </div>
         <div class="mb-4">
           <button class="btn btn-primary mr-3 w-full">Login</button>
@@ -66,9 +80,19 @@ import { mapGetters } from 'vuex';
 import HeaderPartial from '@/partials/HeaderPartial.vue';
 import FooterPartial from '@/partials/FooterPartial.vue';
 import Modal from '@/components/Modal.vue';
+import ToggleInput from '@/components/ToggleInput.vue';
 
 export default {
   name: 'DefaultLayout',
+  data() {
+    return {
+      formLogin: {
+        email: '',
+        password: '',
+        rememberMe: false,
+      },
+    };
+  },
   computed: {
     ...mapGetters(['modals']),
   },
@@ -76,6 +100,7 @@ export default {
     HeaderPartial,
     FooterPartial,
     Modal,
+    ToggleInput,
   },
   methods: {
     // Cerrar el modal
