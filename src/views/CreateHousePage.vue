@@ -77,7 +77,7 @@ export default {
       const room = {
         title,
         description,
-        feature_image: featuredImage,
+        featured_image: featuredImage,
         publishedAt: Date.now(),
       };
 

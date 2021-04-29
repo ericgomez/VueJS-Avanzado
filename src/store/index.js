@@ -41,15 +41,34 @@ export default new Vuex.Store({
     },
     CREATE_ROOM: ({ state, commit }, room) => {
       const newRoom = room;
-      // Creamos id random
-      const roomId = `room${Math.random()}`;
-      newRoom['.key'] = roomId;
+      // Generamos la llave desde firebase
+      const roomId = firebase
+        .database()
+        .ref('rooms')
+        .push().key;
       // Usuario a asignar la abitacion
       newRoom.userId = state.authId;
+      // agregamos la fecha de publicacion
+      newRoom.publishedAt = Math.floor(Date.now() / 1000);
+      newRoom.meta = { likes: 0 };
 
-      // Realizamos la asignacion hacia Vuex
-      commit('SET_ROOM', { newRoom, roomId });
-      commit('APPEND_ROOM_TO_USER', { roomId, userId: newRoom.userId });
+      const updates = {};
+      // Creamos el Query
+      updates[`rooms/${roomId}`] = newRoom;
+      // Creamos el Query
+      updates[`users/${newRoom.userId}/rooms/${roomId}`] = roomId;
+
+      // Le indicamos a firebase que realizaremos una modificacion de tipo actualizacion
+      firebase
+        .database()
+        .ref()
+        .update(updates)
+        .then(() => {
+          // Realizamos la asignacion hacia Vuex
+          commit('SET_ROOM', { newRoom, roomId });
+          commit('APPEND_ROOM_TO_USER', { roomId, userId: newRoom.userId });
+          return Promise.resolve(state.rooms[roomId]);
+        });
     },
     FETCH_ROOMS: ({ state, commit }, limit) => new Promise((resolve) => {
       // Creamos la instancia a la base de datos
@@ -90,7 +109,9 @@ export default new Vuex.Store({
   getters: {
     modals: (state) => state.modals,
     // Recivimos el estado con el id
-    authUser: (state) => state.users[state.authId],
+    authUser(state) {
+      return state.authId ? state.users[state.authId] : null;
+    },
     // Obtenemos los datos del state
     rooms: (state) => state.rooms,
     // Este Getter recibe un id y realiza la funcion de contar los objetos
