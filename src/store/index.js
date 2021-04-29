@@ -20,5 +20,8 @@ export default new Vuex.Store({
       commit('SET_MODAL_STATE', { name, value });
     },
   },
+  getters: {
+    modals: (state) => state.modals,
+  },
   modules: {},
 });
