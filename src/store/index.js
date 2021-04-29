@@ -1,16 +1,17 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import sourceData from '../data.json';
+import firebase from 'firebase';
 import countObjectProperties from '../utils';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    ...sourceData,
-    user: null,
+    users: {},
+    services: {},
+    rooms: {},
     // ID del usuario en el archivo JSON
-    authId: '38St7Q8Zi2N1SPa5ahzssq9kbyp1',
+    authId: null,
     modals: {
       login: false,
     },
@@ -27,6 +28,11 @@ export default new Vuex.Store({
     APPEND_ROOM_TO_USER(state, { roomId, userId }) {
       // Ingresamos el parametro a asignar y el a que usuario se va asingar
       Vue.set(state.users[userId].rooms, roomId, roomId);
+    },
+    SET_ITEM(state, { item, id, resource }) {
+      const newItem = item;
+      newItem['.key'] = id;
+      Vue.set(state[resource], id, newItem);
     },
   },
   actions: {
@@ -45,6 +51,28 @@ export default new Vuex.Store({
       commit('SET_ROOM', { newRoom, roomId });
       commit('APPEND_ROOM_TO_USER', { roomId, userId: newRoom.userId });
     },
+    FETCH_ROOMS: ({ state, commit }, limit) => new Promise((resolve) => {
+      // Creamos la instancia a la base de datos
+      let instance = firebase.database().ref('rooms');
+      if (limit) {
+        // Indicamos que nos muestre los primeros que se encuentren en el limite definido
+        instance = instance.limitToFirst(limit);
+      }
+
+      // Generamos el Query
+      instance.once('value', (snapshot) => {
+        // almacenamos los datos desde firebase
+        const rooms = snapshot.val();
+        // iteramos las llaves
+        Object.keys(rooms).forEach((roomId) => {
+          // buscamos el arreglo iterado
+          const room = rooms[roomId];
+
+          commit('SET_ITEM', { resource: 'rooms', id: roomId, item: room });
+        });
+        resolve(Object.values(state.rooms));
+      });
+    }),
   },
   getters: {
     modals: (state) => state.modals,
