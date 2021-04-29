@@ -17,12 +17,15 @@
                   class="input__search"
                   id="where"
                   type="text"
-                  placeholder="Mexico City, Mexico">
+                  placeholder="Mexico City, Mexico"
+                />
               </div>
             </div>
             <button
-              class="px-2 py-4 bg-yellow-dark font-semibold w-full rounded text-yellow-darker">
-              Search</button>
+              class="px-2 py-4 bg-yellow-dark font-semibold w-full rounded text-yellow-darker"
+            >
+              Search
+            </button>
           </form>
         </div>
       </div>
@@ -31,44 +34,51 @@
       <slot></slot>
     </main>
     <footer-partial></footer-partial>
+    <!-- Modals -->
+    <modal :show="true">
+      <h1>Modal Title</h1>
+    </modal>
   </div>
 </template>
 
 <script>
+// Importaciones
 import HeaderPartial from '@/partials/HeaderPartial.vue';
 import FooterPartial from '@/partials/FooterPartial.vue';
+import Modal from '@/components/Modal.vue';
 
 export default {
   name: 'DefaultLayout',
   components: {
     HeaderPartial,
     FooterPartial,
+    Modal,
   },
 };
 </script>
 
 <style>
+.section__hero {
+  min-height: 450px;
+  background-image: url('https://images.unsplash.com/photo-1504202302068-15fc2055f7f9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1330&q=80');
+}
+
+.form__field .input-icon {
+  top: 7px;
+  left: 9px;
+}
+
+.form__field > .input__search {
+  @apply pl-10;
+}
+
+@media (max-width: 576px) {
   .section__hero {
-    min-height: 450px;
-    background-image: url("https://images.unsplash.com/photo-1504202302068-15fc2055f7f9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1330&q=80");
+    min-height: 250px;
   }
 
-  .form__field .input-icon {
-    top: 7px;
-    left: 9px;
+  .section__form {
+    @apply w-full;
   }
-
-  .form__field > .input__search {
-    @apply pl-10;
-  }
-
-  @media(max-width: 576px) {
-    .section__hero {
-      min-height: 250px;
-    }
-
-    .section__form {
-      @apply w-full;
-    }
-  }
+}
 </style>
