@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import sourceData from '../data.json';
+import countObjectProperties from '../utils';
 
 Vue.use(Vuex);
 
@@ -30,6 +31,8 @@ export default new Vuex.Store({
     authUser: (state) => state.users[state.authId],
     // Obtenemos los datos del state
     rooms: (state) => state.rooms,
+    // Este Getter recibe un id y realiza la funcion de contar los objetos
+    userRoomsCount: (state) => (id) => countObjectProperties(state.users[id].rooms),
   },
   modules: {},
 });
