@@ -5,7 +5,7 @@
         <form class="form">
           <div class="form__field relative">
             <i class="input-icon material-icons absolute text-grey-darker">search</i>
-            <input class="input__search" id="where" type="text" placeholder="Mexico City, Mexico">
+            <input class="input__search" id="where" type="text" placeholder="Mexico City, Mexico" />
           </div>
         </form>
       </div>
@@ -17,7 +17,7 @@
           <aside class="profile__aside px-3">
             <div class="profile__card">
               <div class="profile__thumbnail">
-                <img class="profile__image w-full" src="https://avatars1.githubusercontent.com/u/9919?s=500&v=4">
+                <img class="profile__image w-full" :src="profile.avatar" />
               </div>
             </div>
           </aside>
@@ -26,55 +26,69 @@
               <div class="mb-4">
                 <label class="input__label" for="name">Name</label>
                 <div class="form__field relative">
-                  <input class="input__field" id="name" type="text" placeholder="Bruce Wayne">
+                  <input
+                    v-model="profile.name"
+                    class="input__field"
+                    id="name"
+                    type="text"
+                    placeholder="Bruce Wayne"
+                  />
                 </div>
               </div>
               <div class="mb-4">
                 <label class="input__label" for="username">Username</label>
                 <div class="form__field relative">
-                  <input class="input__field" id="username" type="text" placeholder="bruce.wayne">
+                  <input
+                    v-model="profile.username"
+                    class="input__field"
+                    id="username"
+                    type="text"
+                    placeholder="bruce.wayne"
+                  />
                 </div>
               </div>
               <div class="mb-4">
-                <label
-                  class="input__label"
-                  for="avatar">Avatar</label>
-                <div class="form__field relative">
-                  <input class="input__field" id="avatar" type="text" placeholder="https://avatars1.githubusercontent.com/u/9919?s=500&v=4">
-                </div>
-              </div>
-              <div class="mb-4">
-                <label
-                  class="input__label"
-                  for="email">Email</label>
+                <label class="input__label" for="avatar">Avatar</label>
                 <div class="form__field relative">
                   <input
+                    v-model="profile.avatar"
+                    class="input__field"
+                    id="avatar"
+                    type="text"
+                    placeholder="https://avatars1.githubusercontent.com/u/9919?s=500&v=4"
+                  />
+                </div>
+              </div>
+              <div class="mb-4">
+                <label class="input__label" for="email">Email</label>
+                <div class="form__field relative">
+                  <input
+                    v-model="profile.email"
                     class="input__field"
                     id="email"
                     type="text"
-                    placeholder="bruce.wayne@imnotbatman.org">
+                    placeholder="bruce.wayne@imnotbatman.org"
+                  />
                 </div>
               </div>
               <div class="mb-4">
-                <label
-                  class="input__label"
-                  for="email">Bio</label>
+                <label class="input__label" for="email">Bio</label>
                 <div class="form__field relative">
                   <textarea
+                    v-model="profile.bio"
                     class="input__field"
                     rows="5"
                     id="email"
                     type="text"
-                    placeholder="bruce.wayne@imnotbatman.org"></textarea>
+                    placeholder="bruce.wayne@imnotbatman.org"
+                  ></textarea>
                 </div>
               </div>
               <div class="flex items-center w-auto mb-4">
-                <button
-                  class="btn mr-3">
+                <button class="btn mr-3">
                   Cancel
                 </button>
-                <button
-                  class="bg-yellow-dark text-yellow-darker font-semibold py-2 px-4 rounded">
+                <button class="bg-yellow-dark text-yellow-darker font-semibold py-2 px-4 rounded">
                   Save
                 </button>
               </div>
@@ -87,10 +101,34 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import PageLayout from '@/layouts/PageLayout.vue';
 
 export default {
   name: 'ProfilePage',
+  // Agegamos elementos de entrada con datos iniciales
+  data() {
+    return {
+      profile: {
+        name: '',
+        username: '',
+        avatar: '',
+        email: '',
+        bio: '',
+      },
+    };
+  },
+  // Cuando el componente ya este montado
+  mounted() {
+    // Agregamos los componenetes del usuario para que se setten los datos con perfile y se muestren
+    this.profile = this.user;
+  },
+  // Propiedad computada para acceder a los elemetos del usuario
+  computed: {
+    ...mapGetters({
+      user: 'authUser',
+    }),
+  },
   components: {
     PageLayout,
   },
