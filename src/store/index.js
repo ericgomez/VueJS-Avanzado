@@ -1,11 +1,15 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import sourceData from '../data.json';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    ...sourceData,
     user: null,
+    // ID del usuario en el archivo JSON
+    authId: '38St7Q8Zi2N1SPa5ahzssq9kbyp1',
     modals: {
       login: false,
     },
@@ -22,6 +26,8 @@ export default new Vuex.Store({
   },
   getters: {
     modals: (state) => state.modals,
+    // Recivimos el estado con el id
+    authUser: (state) => state.users[state.authId],
   },
   modules: {},
 });
