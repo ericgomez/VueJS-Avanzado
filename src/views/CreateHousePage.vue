@@ -70,7 +70,9 @@ export default {
     };
   },
   methods: {
+    // Metodo para el boton a realizar el submit
     save() {
+      // Obtenemos los datos dentro de nuestro modelo
       const { title, description, featuredImage } = this.publication;
       const room = {
         title,
@@ -79,6 +81,7 @@ export default {
         publishedAt: Date.now(),
       };
 
+      // Lanzamos accion para que se gurden los datos
       this.$store.dispatch('CREATE_ROOM', room);
     },
   },
