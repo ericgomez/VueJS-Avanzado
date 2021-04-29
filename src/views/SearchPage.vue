@@ -49,6 +49,9 @@ import PageLayout from '@/layouts/PageLayout.vue';
 
 export default {
   name: 'SearchPage',
+  beforeCreate() {
+    this.$store.dispatch('FETCH_ROOMS');
+  },
   computed: {
     ...mapGetters(['rooms']),
   },

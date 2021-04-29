@@ -49,6 +49,10 @@ import TinySlider from '@/components/TinySlider.vue';
 
 export default {
   name: 'HomePage',
+  beforeCreate() {
+    // Agregamos el fetch rooms y le agregamos un limite de 12
+    this.$store.dispatch('FETCH_ROOMS', 12);
+  },
   computed: {
     // Nos traemos los Getters de rooms
     ...mapGetters(['rooms']),

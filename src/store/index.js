@@ -67,11 +67,24 @@ export default new Vuex.Store({
         Object.keys(rooms).forEach((roomId) => {
           // buscamos el arreglo iterado
           const room = rooms[roomId];
-
+          // mandamos llamar nuestro mutador agregando room a Vuex
           commit('SET_ITEM', { resource: 'rooms', id: roomId, item: room });
         });
+        // Resolvemos la promesa
         resolve(Object.values(state.rooms));
       });
+    }),
+    FETCH_USER: ({ state, commit }, { id }) => new Promise((resolve) => {
+      firebase
+        .database()
+        .ref('users')
+        .child(id)
+        .once('value', (snapshot) => {
+          // Seteamos el valor dentro de los recursos
+          commit('SET_ITEM', { resource: 'users', id: snapshot.key, item: snapshot.val() });
+          // Resolvemos nuestra funcion y buscamos el identificador
+          resolve(state.users[id]);
+        });
     }),
   },
   getters: {
