@@ -27,6 +27,7 @@ new Vue({
   store,
   render: (h) => h(App),
   beforeCreate() {
+    // Validamos si hay un usuario autenticado
     if (store.state.authId) {
       this.$store.dispatch('FETCH_USER', { id: store.state.authId });
     }

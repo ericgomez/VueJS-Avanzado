@@ -40,7 +40,10 @@
               >
                 Login
               </button>
-              <button class="bg-yellow-dark text-yellow-darker font-semibold py-2 px-4 rounded">
+              <button
+                class="bg-yellow-dark text-yellow-darker font-semibold py-2 px-4 rounded"
+                @click.prevent="signUp"
+              >
                 Register
               </button>
             </div>
@@ -69,7 +72,10 @@ export default {
       });
     },
     signUp() {
-      console.log('Sign Up Click');
+      this.$store.dispatch('TOGGLE_MODAL_STATE', {
+        name: 'register',
+        value: true,
+      });
     },
   },
   computed: {

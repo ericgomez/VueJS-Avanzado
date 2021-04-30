@@ -11,7 +11,7 @@ export default new Vuex.Store({
     services: {},
     rooms: {},
     // ID del usuario en el archivo JSON
-    authId: null,
+    authId: null, // Aqui es donde se agrega el id del usuario de firestore
     modals: {
       login: false,
       register: false,
@@ -104,6 +104,29 @@ export default new Vuex.Store({
           commit('SET_ITEM', { resource: 'users', id: snapshot.key, item: snapshot.val() });
           // Resolvemos nuestra funcion y buscamos el identificador
           resolve(state.users[id]);
+        });
+    }),
+    CREATE_USER: ({ state, commit }, { email, name, password }) => new Promise((resolve) => {
+      firebase
+        .auth() // metodo a utizar
+      // el metodo especifico createUserWithEmailAndPassword
+        .createUserWithEmailAndPassword(email, password)
+        .then((account) => {
+          const id = account.user.uid; // Obtenemos el ID
+          const registeredAt = Math.floor(Date.now() / 1000); // Fecha de registro
+          const newUser = { email, name, registeredAt }; // nuevo usuario a crear
+
+          // Lo almacenamos en firebase en el documento user
+          firebase
+            .database()
+            .ref('users')
+            .child(id)
+            .set(newUser)
+            .then(() => {
+              // Lanzamos la mutacion
+              commit('SET_ITEM', { resource: 'users', id, item: newUser });
+              resolve(state.users[id]);
+            });
         });
     }),
   },
