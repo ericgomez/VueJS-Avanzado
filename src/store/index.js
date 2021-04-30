@@ -14,6 +14,7 @@ export default new Vuex.Store({
     authId: null,
     modals: {
       login: false,
+      register: false,
     },
   },
   mutations: {

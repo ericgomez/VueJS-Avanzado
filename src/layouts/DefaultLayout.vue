@@ -71,6 +71,49 @@
         </div>
       </form>
     </modal>
+    <modal :show="modals.register" @close-modal="closeModalRegister">
+      <form class="form" @submit.prevent="registerHandlerSubmit">
+        <div class="mb-4">
+          <label class="input__label" for="email">Email</label>
+          <div class="form__field relative">
+            <input
+              class="input__field"
+              id="email"
+              v-model="formRegister.email"
+              type="email"
+              placeholder="bruce.wayne@imnotbatman.org"
+            />
+          </div>
+        </div>
+        <div class="mb-4">
+          <label class="input__label" for="email">Name</label>
+          <div class="form__field relative">
+            <input
+              class="input__field"
+              id="name"
+              v-model="formRegister.name"
+              type="text"
+              placeholder="Bruce Wayne"
+            />
+          </div>
+        </div>
+        <div class="mb-4">
+          <label class="input__label" for="password">Password</label>
+          <div class="form__field relative">
+            <input
+              class="input__field"
+              id="password"
+              v-model="formRegister.password"
+              type="password"
+              placeholder="Create a Password"
+            />
+          </div>
+        </div>
+        <div class="mb-4">
+          <button class="btn w-full">Create account</button>
+        </div>
+      </form>
+    </modal>
   </div>
 </template>
 
@@ -91,6 +134,11 @@ export default {
         password: '',
         rememberMe: false,
       },
+      formRegister: {
+        email: '',
+        name: '',
+        password: '',
+      },
     };
   },
   computed: {
@@ -107,6 +155,12 @@ export default {
     closeModal() {
       this.$store.dispatch('TOGGLE_MODAL_STATE', {
         name: 'login',
+        value: false,
+      });
+    },
+    closeModalRegister() {
+      this.$store.dispatch('TOGGLE_MODAL_STATE', {
+        name: 'register',
         value: false,
       });
     },
