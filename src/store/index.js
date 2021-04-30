@@ -35,6 +35,10 @@ export default new Vuex.Store({
       newItem['.key'] = id;
       Vue.set(state[resource], id, newItem);
     },
+    // Realizamos la mutacion del ID
+    SET_AUTHID(state, id) {
+      state.authId = id;
+    },
   },
   actions: {
     TOGGLE_MODAL_STATE: ({ commit }, { name, value }) => {
@@ -129,11 +133,35 @@ export default new Vuex.Store({
             });
         });
     }),
+    FETCH_AUTH_USER: ({ dispatch, commit }) => {
+      // Verificamos que el usuario se a autenticado de forma correcta
+      const userId = firebase.auth().currentUser.uid;
+      // Obtenemos el usuario
+      return dispatch('FETCH_USER', { id: userId }).then(() => {
+        commit('SET_AUTHID', userId);
+      });
+    },
+    // Inicio de sesion
+    SIGN_IN(context, { email, password }) {
+      // Enviamos al peticion a firebase de que vaya y busque si el usuario y la contraseña existe
+      return firebase.auth().signInWithEmailAndPassword(email, password);
+    },
+    LOG_OUT({ commit }) {
+      // LLama a firebase para signOut
+      firebase
+        .auth()
+        .signOut()
+        .then(() => {
+          // inidcamos que no hay nadie autenticado con un null
+          commit('SET_AUTHID', null);
+        });
+    },
   },
   getters: {
     modals: (state) => state.modals,
     // Recivimos el estado con el id
     authUser(state) {
+      // Validamos que el usaurio exista de caso contrario no hacemos nada
       return state.authId ? state.users[state.authId] : null;
     },
     // Obtenemos los datos del state

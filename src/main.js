@@ -22,6 +22,14 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 firebase.analytics();
 
+// Con ayuda de Firebase escuchamos el cambio de la autenticacion cuando el estado cambie
+firebase.auth().onAuthStateChanged((user) => {
+  if (user) {
+    // Obtenemos el usuario en caso de que ya este autenticado loggeado
+    store.dispatch('FETCH_AUTH_USER');
+  }
+});
+
 new Vue({
   router,
   store,
